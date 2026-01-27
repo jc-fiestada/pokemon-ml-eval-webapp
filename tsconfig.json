@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["DOM", "ES2020"],
+    "rootDir": "./wwwroot/src",
+    "outDir": "./wwwroot/dist",
+    "strict": true,
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+
+  "include": ["wwwroot/src/**/*"],
+  "exclude": ["node_modules", "wwwroot/dist/**/*"]
+}
