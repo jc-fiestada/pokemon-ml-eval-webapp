@@ -6,11 +6,14 @@ using Microsoft.IdentityModel.Tokens.Experimental;
 using PokemonMlEvalWebApp.Models;
 using PokemonMlEvalWebApp.Validators;
 using PokemonMlEvalWebApp.MysqlService;
+using PokemonMlEvalWebApp.ApiServices;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<Validate>();
+builder.Services.AddScoped<Service>();
+builder.Services.AddHttpClient<PokemonApiServices>();
 
 Env.Load("keys.env");
 string jwtSecretKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new Exception("ERROR: jwt secret key is missing");
@@ -37,17 +40,15 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPost("validate/signin", (SignInRequest user, Validate service) =>
+
+app.MapPost("/signin/admin", async (SignInRequest user, Service service, Validate validate) =>
 {
-    
+    return await validate.ValidateSignInRequest(user, service, keybytes);
 });
 
-app.MapGet("/try", async () =>
+app.MapGet("/verify/page-access", () =>
 {
-    
-    Service service =  new Service();
-
-    return Results.Ok(new {admin = await service.SelectAdmin()});
-});
+    return Results.Ok("User Authenticated");
+}).RequireAuthorization();
 
 app.Run();

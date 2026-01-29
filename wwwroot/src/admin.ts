@@ -5,15 +5,13 @@ addEventListener("DOMContentLoaded", async () => {
         headers: {"Authorization" : `Bearer ${localStorage.getItem("token")}`}
     });
 
-    // ill add it later
-
     if (response.status === 401){
-        // redirect to 401 page
+        window.location.href = "unauthorized.html";
         return;
     }
 
     if (!response.ok){
-        // redirect to error page
+        window.location.href = "error.html";
         return;
     }
 
