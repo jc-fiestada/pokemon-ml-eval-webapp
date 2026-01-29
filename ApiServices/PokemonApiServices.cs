@@ -1,5 +1,7 @@
 using System.Text.Json;
+using Microsoft.VisualBasic;
 using PokemonMlEvalWebApp.Models;
+using PokemonMlEvalWebApp.MysqlService;
 
 namespace PokemonMlEvalWebApp.ApiServices;
 
@@ -15,35 +17,47 @@ public class PokemonApiServices
         _httpClient.Timeout = TimeSpan.FromSeconds(10);
     }
 
-    // use only to populate db then delete later
-    public async Task LoadRawJsonFiles(int quantity = 150)
+    public void Show()
+    {
+        Console.WriteLine(unproccessedDir);
+    }
+
+    // dont overuse? ts is heavy
+    public async Task ManagePokemonDataSet(Service service)
+    {
+        if (!Directory.Exists(unproccessedDir)) Directory.CreateDirectory(unproccessedDir);
+        IEnumerable<string> files = Directory.EnumerateFiles(unproccessedDir);
+        if (files.Count() >= 150) return;
+
+        await LoadRawJsonFiles();
+        await ProcessRawPokemon(service);
+        DeleteRawJsonFiles();
+    }
+
+    private async Task LoadRawJsonFiles(int quantity = 150)
     {
         if (quantity > 150) quantity = 150;
-        if (!Directory.Exists(unproccessedDir)) Directory.CreateDirectory(unproccessedDir);
 
-        if (Directory.EnumerateFiles(unproccessedDir).Count() >= 150) return;
-
-        for (int i = 0; i < quantity; i++)
+        for (int i = 1; i <= quantity; i++)
         {
             try
             {
                 string filepath = Path.Combine(unproccessedDir, $"{i}.json");
                 if (File.Exists(filepath)) continue;
 
-                var response = await _httpClient.GetAsync($"{i}");
+                HttpResponseMessage response = await _httpClient.GetAsync($"{i}");
                 if (!response.IsSuccessStatusCode) continue;
 
-                var jsonContent = await response.Content.ReadAsStringAsync();
+                string jsonContent = await response.Content.ReadAsStringAsync();
                 File.WriteAllText(filepath, jsonContent);
             } catch (Exception)
             {
                 continue;
             }
         }
-        
     }
 
-    public void DeleteRawJsonFiles()
+    private void DeleteRawJsonFiles()
     {
         if (!Directory.Exists(unproccessedDir)) return;
         foreach (var file in Directory.EnumerateFiles(unproccessedDir))
@@ -52,11 +66,8 @@ public class PokemonApiServices
         }
     }
 
-    public async Task ProcessRawPokemon()
+    private async Task ProcessRawPokemon(Service service)
     {
-        if (!Directory.Exists(unproccessedDir) || Directory.EnumerateFiles(unproccessedDir).Count() == 0 )
-        throw new Exception("ERROR: Json files does not exist's");
-
         foreach (var file in Directory.EnumerateFiles(unproccessedDir))
         {
             string jsonContent = await File.ReadAllTextAsync(file);
@@ -94,12 +105,8 @@ public class PokemonApiServices
                     break;
                 }
             }
-
-            // db functionality here, ill add it later 
-
+            await service.InsertPokemon(pokemon);
         }
-
-
     }
 }
 

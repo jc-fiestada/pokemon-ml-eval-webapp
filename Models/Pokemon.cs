@@ -1,9 +1,9 @@
 namespace PokemonMlEvalWebApp.Models;
 
-class Pokemon
+public class Pokemon
 {
-    public string Name {get; set;}
-    public string Primarytype {get; set;}
+    public string? Name {get; set;}
+    public string? Primarytype {get; set;}
     public int Health {get; set;}
     public int Defense {get; set;}
     public int Weight {get; set;}

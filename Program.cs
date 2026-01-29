@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<Validate>();
 builder.Services.AddScoped<Service>();
+builder.Services.AddScoped<PokemonApiServices>();
 builder.Services.AddHttpClient<PokemonApiServices>();
 
 Env.Load("keys.env");
@@ -50,5 +51,16 @@ app.MapGet("/verify/page-access", () =>
 {
     return Results.Ok("User Authenticated");
 }).RequireAuthorization();
+
+app.MapGet("/store/db/pokemon", async (PokemonApiServices apiService, Service service) =>
+{
+    await apiService.ManagePokemonDataSet(service);
+    return Results.Ok("success");
+}).RequireAuthorization();
+
+app.MapGet("/check", (PokemonApiServices apiService) =>
+{
+    apiService.Show();
+});
 
 app.Run();
