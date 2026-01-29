@@ -5,6 +5,8 @@ using DotNetEnv;
 using Microsoft.IdentityModel.Tokens.Experimental;
 using PokemonMlEvalWebApp.Models;
 using PokemonMlEvalWebApp.Validators;
+using PokemonMlEvalWebApp.MysqlService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,14 @@ app.UseAuthorization();
 app.MapPost("validate/signin", (SignInRequest user, Validate service) =>
 {
     
+});
+
+app.MapGet("/try", async () =>
+{
+    
+    Service service =  new Service();
+
+    return Results.Ok(new {admin = await service.SelectAdmin()});
 });
 
 app.Run();

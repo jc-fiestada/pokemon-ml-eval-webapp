@@ -8,7 +8,7 @@ signinBtn.addEventListener("click", async () => {
     const username: string = usernameTextbox.value;
     const password: string = passwordTextbox.value;
 
-    const response = await fetch("", {
+    const response = await fetch("/signin/admin", {
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({
@@ -17,11 +17,12 @@ signinBtn.addEventListener("click", async () => {
         })
     });
 
-    const message: string = await response.text();
-
     if (response.ok){
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
         window.location.href = "admin.ts";
     }
 
+    const message: string = await response.text();
     showToast(message);
 });
