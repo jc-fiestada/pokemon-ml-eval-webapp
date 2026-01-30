@@ -3,3 +3,6 @@
 /obj/
 
 *.env*
+
+/PythonServices/venv/
+/wwwroot/dist/
