@@ -58,9 +58,5 @@ app.MapGet("/store/db/pokemon", async (PokemonApiServices apiService, Service se
     return Results.Ok("success");
 }).RequireAuthorization();
 
-app.MapGet("/check", (PokemonApiServices apiService) =>
-{
-    apiService.Show();
-});
 
 app.Run();

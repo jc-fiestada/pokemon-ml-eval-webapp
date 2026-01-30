@@ -1,0 +1,7 @@
+pandas
+scikit-learn
+uvicorn
+fastapi
+joblib
+mysql-connector-python
+python-dotenv

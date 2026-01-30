@@ -8,7 +8,7 @@ namespace PokemonMlEvalWebApp.ApiServices;
 public class PokemonApiServices
 {
     private readonly HttpClient _httpClient;
-    string unproccessedDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "Data", "Unprocessed"));
+    string unproccessedDir = Path.Combine("Data", "Unprocessed");
 
     public PokemonApiServices(HttpClient client)
     {
