@@ -1,4 +1,4 @@
-import ReadData
+from Services import ReadData
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,9 +8,6 @@ from sklearn.pipeline import Pipeline
 from pathlib import Path
 import pandas as pd
 from sklearn.metrics import f1_score, accuracy_score, recall_score, precision_score
-
-
-
 
 def TrainAndTestModels(X_train_data : pd.DataFrame, y_train_data : pd.Series, X_test_data : pd.DataFrame):
     ModelPipelines = {
