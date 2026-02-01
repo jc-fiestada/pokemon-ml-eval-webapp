@@ -98,7 +98,6 @@ public class Service
         command.Parameters.AddWithValue("@special_defense", pokemon.SpecialDefense);
 
         await command.ExecuteNonQueryAsync();
-
     }
 
 

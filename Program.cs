@@ -59,11 +59,14 @@ app.MapGet("/store/db/pokemon", async (PokemonApiServices apiService, Service se
     return Results.Ok("success");
 }).RequireAuthorization();
 
-app.MapPost("/predict/pokemon", async (PythonApiService service) =>
+app.MapPost("/predict/pokemon", async (UserModelRequest request, PythonApiService service) =>
 {
-    PokemonEvalDTO response = await service.TrainAndTestModels(7, 42);
+    if (request.Quantity <= 0 || request.RandomState <= 5) 
+    return Results.UnprocessableEntity("Invalid Quantity or RandomState Value");
+
+    PokemonEvalDTO response = await service.TrainAndTestModels(request.Quantity, request.RandomState);
     return Results.Ok(response);
-});
+}).RequireAuthorization();
 
 
 app.Run();
