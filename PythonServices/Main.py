@@ -8,5 +8,5 @@ app = FastAPI(title="Model Eval Api")
 
 @app.post("/predict/pokemon-type")
 def predict(user: UserRequest):
-    return ModelEval(user.Quantity, user.RandomState)
+    return ModelEval(user.quantity, user.randomState)
 

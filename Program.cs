@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<Validate>();
 builder.Services.AddScoped<Service>();
 builder.Services.AddScoped<PokemonApiServices>();
+builder.Services.AddHttpClient<PythonApiService>();
 builder.Services.AddHttpClient<PokemonApiServices>();
 
 Env.Load("keys.env");
@@ -57,6 +58,12 @@ app.MapGet("/store/db/pokemon", async (PokemonApiServices apiService, Service se
     await apiService.ManagePokemonDataSet(service);
     return Results.Ok("success");
 }).RequireAuthorization();
+
+app.MapPost("/predict/pokemon", async (PythonApiService service) =>
+{
+    PokemonEvalDTO response = await service.TrainAndTestModels(7, 42);
+    return Results.Ok(response);
+});
 
 
 app.Run();

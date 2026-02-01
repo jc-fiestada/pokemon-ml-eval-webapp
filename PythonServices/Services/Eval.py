@@ -8,7 +8,7 @@ def ModelEval(quantity: int = 150, random_state: int = 42):
     ModelEval: pd.DataFrame = X_test.copy()
     ModelEval[["id" ,"name"]] = name_test.copy()
     ModelEval["true_value"] = y_test.copy()
-    ModelEval["knn_predicted_prediction"] = knn_prediction
+    ModelEval["knn_prediction"] = knn_prediction
     ModelEval["log_reg_prediction"] = log_reg_prediction
     ModelEval["tree_prediction"] = tree_prediction
 
