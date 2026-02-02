@@ -17,36 +17,7 @@
             <h2>Pokemon Test Subjects</h2>
 
             <div class="pokemon-list">
-                <div class="pokemon-element" id="pokemon-list">
-                    <div class="pokemon-row" >
-                        <div class="row-left">
-                            <span class="pid">#001</span>
-                            <span class="pname">Bulbasaur</span>
-                        </div>
-
-                        <div class="row-mid">
-                            <span>H: 0.7</span>
-                            <span>W: 6.9</span>
-                            <span>HP: 45</span>
-                            <span>ATK: 49</span>
-                            <span>DEF: 49</span>
-                            <span>SP: 65</span>
-                            <span>SD: 65</span>
-                            <span>SPD: 45</span>
-                        </div>
-
-                        <div class="row-right">
-                            <span class="true-type">True: Grass</span>
-                            <span>KNN: Grass</span>
-                            <span>LogReg: Grass</span>
-                            <span>Tree: Poison</span>
-                        </div>
-                    </div>
-                </div>
-
-               
-
-
+                <div class="pokemon-element" id="pokemon-list"> </div>
             </div>
         </section>
 
@@ -55,25 +26,42 @@
             <section class="metrics">
                 <h3>Model Scores</h3>
 
-                <div class="metric">
-                    <span>Accuracy</span>
-                    <strong class="accuracy-score">NA</strong>
-                </div>
-
-                <div class="metric">
-                    <span>Precision</span>
-                    <strong class="precision-score">NA</strong>
-                </div>
-
-                <div class="metric">
-                    <span>Recall</span>
-                    <strong class="recall-score">NA</strong>
-                </div>
-
-                <div class="metric">
-                    <span>F1 Score</span>
-                    <strong class="f1-score">NA</strong>
-                </div>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>KNN</th>
+                            <th>LogReg</th>
+                            <th>Tree</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Accuracy</td>
+                            <td class="knn-acc" id="knn-acc">NA</td>
+                            <td class="lr-acc" id="lr-acc">NA</td>
+                            <td class="tree-acc" id="tree-acc">NA</td>
+                        </tr>
+                        <tr>
+                            <td>Precision</td>
+                            <td class="knn-pre" id="knn-pre">NA</td>
+                            <td class="lr-pre" id="lr-pre">NA</td>
+                            <td class="tree-pre" id="tree-pre">NA</td>
+                        </tr>
+                        <tr>
+                            <td>Recall</td>
+                            <td class="knn-rec" id="knn-rec">NA</td>
+                            <td class="lr-rec" id="lr-rec">NA</td>
+                            <td class="tree-rec" id="tree-rec">NA</td>
+                        </tr>
+                        <tr>
+                            <td>F1</td>
+                            <td class="knn-f1" id="knn-f1">NA</td>
+                            <td class="lr-f1" id="lr-f1">NA</td>
+                            <td class="tree-f1" id="tree-f1">NA</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section class="controls">
@@ -84,11 +72,10 @@
 
                 <button id="runEval">Run Evaluation</button>
             </section>
-
         </aside>
-
     </div>
 
     <script type="module" src="../dist/admin.js"></script>
+    
 </body>
 </html>

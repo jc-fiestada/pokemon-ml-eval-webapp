@@ -189,3 +189,27 @@ body {
 .pokemon-list::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.26);
 }
+
+
+.metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.metrics-table th,
+.metrics-table td {
+    padding: 6px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.metrics-table th {
+    font-weight: 800;
+    opacity: 0.85;
+}
+
+.metrics-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+}

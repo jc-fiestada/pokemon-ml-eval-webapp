@@ -2,6 +2,7 @@ from Services import DataHandlers
 import pandas as pd
 
 def ModelEval(quantity: int = 150, random_state: int = 42):    
+
     X_train, X_test, y_train, y_test, name_train, name_test  = DataHandlers.SplitData(quantity, random_state)
     knn_prediction, log_reg_prediction, tree_prediction = DataHandlers.TrainAndTestModels(X_train, y_train, X_test)
 
