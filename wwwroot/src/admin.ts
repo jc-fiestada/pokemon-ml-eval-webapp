@@ -2,11 +2,13 @@ import { showToast } from "./animation.js";
 import { PokemonEvalResponse } from "./interfaces/pokemonEval.js";
 
 const runEvalButton = <HTMLButtonElement>document.getElementById("runEval");
+const loadPokemonButton = <HTMLButtonElement>document.getElementById("loadPokemon");
+
 const randomState = <HTMLInputElement>document.getElementById("randomState");
 const sampleFreq = <HTMLInputElement>document.getElementById("sampleFreq");
 
-randomState.value = "0";
-randomState.value = "0";
+randomState.value = "1";
+randomState.value = "1";
 
 const pokemonList = <HTMLDivElement>document.getElementById("pokemon-list");
 
@@ -43,6 +45,7 @@ addEventListener("DOMContentLoaded", async () => {
 });
 
 runEvalButton.addEventListener("click", async () => {
+    runEvalButton.disabled = true;
     pokemonList.innerHTML = "";
 
     const response = await fetch ("/predict/pokemon", {
@@ -58,17 +61,20 @@ runEvalButton.addEventListener("click", async () => {
 
     if (response.status === 400){
         showToast("Invalid Evaluation Input Value/s");
+        runEvalButton.disabled = false;
         return;
     }
 
     if (response.status === 422){
         const message = await response.text();
         showToast(message);
+        runEvalButton.disabled = false;
         return;
     }
 
     if (response.status === 401){
         window.location.href = "unauthorized.html";
+        runEvalButton.disabled = false;
         return;
     }
 
@@ -123,4 +129,27 @@ runEvalButton.addEventListener("click", async () => {
     treeRecall.innerText = data.tree_metrics.recall_score.toString();
     treeF1.innerText = data.tree_metrics.f1_score.toString();
 
+    runEvalButton.disabled = false;
+});
+
+
+loadPokemonButton.addEventListener("click", async () => {
+    loadPokemonButton.disabled = true;
+
+    showToast("Processing...");
+    const response = await fetch("/store/db/pokemon", {
+        method: "GET",
+        headers: {"Authorization" : `Bearer ${localStorage.getItem("token")}`}});
+
+    if (response.status === 409 || response.status === 500){
+        const message = await response.text();
+        showToast(message);
+        loadPokemonButton.disabled = false;
+        return;
+    }
+
+    showToast("Pokemon has been successfully stored in the db");
+    
+
+    loadPokemonButton.disabled = false;
 });

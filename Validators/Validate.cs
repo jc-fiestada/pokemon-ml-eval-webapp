@@ -18,7 +18,16 @@ public class Validate
         if (data.Username.Length > 15) return Results.BadRequest("Username must not exceed 15 characters");
         if (data.Password.Length > 15) return Results.BadRequest("Password must not exceed 15 characters");
 
-        Admin admin = await service.SelectAdmin();
+        Admin admin;
+
+        try {
+            admin = await service.SelectAdmin();
+        } catch (InvalidOperationException ex) {
+            return Results.InternalServerError(ex);
+        } catch (Exception)
+        {
+            return Results.InternalServerError("ERROR: Internal database error");
+        }
 
         if (data.Username != admin.Username || !BCrypt.Net.BCrypt.Verify(data.Password, admin.Password)) return Results.Unauthorized();
 

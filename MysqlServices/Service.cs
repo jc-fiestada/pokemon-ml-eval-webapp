@@ -12,7 +12,7 @@ public class Service
     //
     public Service()
     {
-        string dbPassword = Environment.GetEnvironmentVariable("MSQL_PASSWORD") ?? throw new Exception("ERROR: database key missing");
+        string dbPassword = Environment.GetEnvironmentVariable("MSQL_PASSWORD") ?? throw new InvalidOperationException("ERROR: database key missing");
         dbConn = "Server=localhost;" + "Database=pokemon_admin; " +  "User=root;" + $"Password={dbPassword};";
     }
 
@@ -43,7 +43,7 @@ public class Service
         using MySqlCommand command = new MySqlCommand(query, conn);
         using var reader = await command.ExecuteReaderAsync();
 
-        if (!await reader.ReadAsync()) throw new Exception("ERROR: admin credentials failed to load");
+        if (!await reader.ReadAsync()) throw new InvalidOperationException("ERROR: admin credentials failed to load");
 
         return new Admin()
         {
@@ -102,5 +102,19 @@ public class Service
 
 
 
-    
+    public async Task<bool> IsDataExists()
+    {
+        await CreatePokemonTable();
+
+        using MySqlConnection conn = new MySqlConnection(dbConn);
+        await conn.OpenAsync();
+
+        string query = "SELECT * FROM pokemon LIMIT 1";
+
+        using MySqlCommand command = new MySqlCommand(query, conn);
+        using var reader = await command.ExecuteReaderAsync();
+
+        if (!await reader.ReadAsync()) return false;
+        return true;
+    }
 }

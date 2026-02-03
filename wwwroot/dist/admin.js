@@ -1,9 +1,10 @@
 import { showToast } from "./animation.js";
 const runEvalButton = document.getElementById("runEval");
+const loadPokemonButton = document.getElementById("loadPokemon");
 const randomState = document.getElementById("randomState");
 const sampleFreq = document.getElementById("sampleFreq");
-randomState.value = "0";
-randomState.value = "0";
+randomState.value = "1";
+randomState.value = "1";
 const pokemonList = document.getElementById("pokemon-list");
 const knnAccuracy = document.getElementById("knn-acc");
 const knnPrecision = document.getElementById("knn-pre");
@@ -32,6 +33,7 @@ addEventListener("DOMContentLoaded", async () => {
     showToast("Welcome Admin!");
 });
 runEvalButton.addEventListener("click", async () => {
+    runEvalButton.disabled = true;
     pokemonList.innerHTML = "";
     const response = await fetch("/predict/pokemon", {
         method: "POST",
@@ -46,15 +48,18 @@ runEvalButton.addEventListener("click", async () => {
     });
     if (response.status === 400) {
         showToast("Invalid Evaluation Input Value/s");
+        runEvalButton.disabled = false;
         return;
     }
     if (response.status === 422) {
         const message = await response.text();
         showToast(message);
+        runEvalButton.disabled = false;
         return;
     }
     if (response.status === 401) {
         window.location.href = "unauthorized.html";
+        runEvalButton.disabled = false;
         return;
     }
     showToast("Processing...");
@@ -101,5 +106,22 @@ runEvalButton.addEventListener("click", async () => {
     treePrecision.innerText = data.tree_metrics.precision_score.toString();
     treeRecall.innerText = data.tree_metrics.recall_score.toString();
     treeF1.innerText = data.tree_metrics.f1_score.toString();
+    runEvalButton.disabled = false;
+});
+loadPokemonButton.addEventListener("click", async () => {
+    loadPokemonButton.disabled = true;
+    showToast("Processing...");
+    const response = await fetch("/store/db/pokemon", {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+    });
+    if (response.status === 409 || response.status === 500) {
+        const message = await response.text();
+        showToast(message);
+        loadPokemonButton.disabled = false;
+        return;
+    }
+    showToast("Pokemon has been successfully stored in the db");
+    loadPokemonButton.disabled = false;
 });
 //# sourceMappingURL=admin.js.map

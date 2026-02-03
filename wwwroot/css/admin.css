@@ -165,7 +165,9 @@ body {
     cursor: pointer;
     background: #1D546D;
     font-weight: 700;
+    margin-bottom: 10px; /* ← add this */
 }
+
 
 .controls button:hover {
     background: #246a8a;

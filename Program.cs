@@ -55,7 +55,16 @@ app.MapGet("/verify/page-access", () =>
 
 app.MapGet("/store/db/pokemon", async (PokemonApiServices apiService, Service service) =>
 {
-    await apiService.ManagePokemonDataSet(service);
+    if (await service.IsDataExists()) return Results.Conflict("Pokemon Data Already Exist's");
+
+    try
+    {
+        await apiService.ManagePokemonDataSet(service);
+    } catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        return Results.InternalServerError("ServerError: Something went wrong");
+    }
     return Results.Ok("success");
 }).RequireAuthorization();
 
