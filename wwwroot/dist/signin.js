@@ -17,9 +17,11 @@ signinBtn.addEventListener("click", async () => {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         window.location.href = "admin.html";
+        return;
     }
     if (response.status === 401) {
         showToast("Incorrect Admin Credentials!");
+        return;
     }
     const message = await response.text();
     showToast(message);

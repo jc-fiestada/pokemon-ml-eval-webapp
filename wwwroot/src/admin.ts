@@ -7,9 +7,6 @@ const loadPokemonButton = <HTMLButtonElement>document.getElementById("loadPokemo
 const randomState = <HTMLInputElement>document.getElementById("randomState");
 const sampleFreq = <HTMLInputElement>document.getElementById("sampleFreq");
 
-randomState.value = "1";
-randomState.value = "1";
-
 const pokemonList = <HTMLDivElement>document.getElementById("pokemon-list");
 
 const knnAccuracy =<HTMLTableCellElement>document.getElementById("knn-acc");
@@ -28,6 +25,8 @@ const treeRecall =<HTMLTableCellElement>document.getElementById("tree-rec");
 const treeF1 =<HTMLTableCellElement>document.getElementById("tree-f1");
 
 addEventListener("DOMContentLoaded", async () => {
+    randomState.value = "1";
+    sampleFreq.value = "7";
     const response = await fetch("/verify/page-access", {
         headers: {"Authorization" : `Bearer ${localStorage.getItem("token")}`}
     });
@@ -65,7 +64,7 @@ runEvalButton.addEventListener("click", async () => {
         return;
     }
 
-    if (response.status === 422){
+    if (response.status === 422 || response.status === 500){
         const message = await response.text();
         showToast(message);
         runEvalButton.disabled = false;
@@ -140,6 +139,12 @@ loadPokemonButton.addEventListener("click", async () => {
     const response = await fetch("/store/db/pokemon", {
         method: "GET",
         headers: {"Authorization" : `Bearer ${localStorage.getItem("token")}`}});
+    
+    if (response.status === 401){
+        window.location.href = "unauthorized.html";
+        runEvalButton.disabled = false;
+        return;
+    }
 
     if (response.status === 409 || response.status === 500){
         const message = await response.text();
@@ -149,7 +154,5 @@ loadPokemonButton.addEventListener("click", async () => {
     }
 
     showToast("Pokemon has been successfully stored in the db");
-    
-
     loadPokemonButton.disabled = false;
 });

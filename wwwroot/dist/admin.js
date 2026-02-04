@@ -3,8 +3,6 @@ const runEvalButton = document.getElementById("runEval");
 const loadPokemonButton = document.getElementById("loadPokemon");
 const randomState = document.getElementById("randomState");
 const sampleFreq = document.getElementById("sampleFreq");
-randomState.value = "1";
-randomState.value = "1";
 const pokemonList = document.getElementById("pokemon-list");
 const knnAccuracy = document.getElementById("knn-acc");
 const knnPrecision = document.getElementById("knn-pre");
@@ -19,6 +17,8 @@ const treePrecision = document.getElementById("tree-pre");
 const treeRecall = document.getElementById("tree-rec");
 const treeF1 = document.getElementById("tree-f1");
 addEventListener("DOMContentLoaded", async () => {
+    randomState.value = "1";
+    sampleFreq.value = "7";
     const response = await fetch("/verify/page-access", {
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
     });
@@ -51,7 +51,7 @@ runEvalButton.addEventListener("click", async () => {
         runEvalButton.disabled = false;
         return;
     }
-    if (response.status === 422) {
+    if (response.status === 422 || response.status === 500) {
         const message = await response.text();
         showToast(message);
         runEvalButton.disabled = false;
@@ -115,6 +115,11 @@ loadPokemonButton.addEventListener("click", async () => {
         method: "GET",
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
     });
+    if (response.status === 401) {
+        window.location.href = "unauthorized.html";
+        runEvalButton.disabled = false;
+        return;
+    }
     if (response.status === 409 || response.status === 500) {
         const message = await response.text();
         showToast(message);
